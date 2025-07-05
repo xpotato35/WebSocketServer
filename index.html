@@ -5,7 +5,7 @@
   <meta name="author" content="oxxo.studio">
   <meta name="copyright" content="oxxo.studio">
   <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>HTML5 控制裝置陀螺儀 ( 三軸 ) demo1 - OXXO.STUDIO</title>
+	<title>WebSocket Client Demo_控制裝置陀螺儀 ( 三軸 )</title>
 	<style>
 		body{
 			margin:50px;
@@ -33,6 +33,48 @@
 	</script>
 </head>
 <body>
+  <h1>WebSocket Client</h1>
+  <input id="messageInput" type="text" placeholder="輸入訊息..." />
+  <button id="sendBtn">送出</button>
+  <div id="log" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: scroll;"></div>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+
+    const logDiv = document.getElementById('log');
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function log(message) {
+      logDiv.textContent += message + '\n';
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    ws.onopen = () => {
+      log('連線已開啟');
+    };
+
+    ws.onmessage = (event) => {
+      log('收到伺服器訊息：' + event.data);
+    };
+
+    ws.onerror = (error) => {
+      log('WebSocket 錯誤: ' + error.message);
+    };
+
+    ws.onclose = () => {
+      log('連線已關閉');
+    };
+
+    sendBtn.onclick = () => {
+      const msg = input.value;
+      if (msg && ws.readyState === WebSocket.OPEN) {
+        ws.send(msg);
+        log('送出訊息：' + msg);
+        input.value = '';
+      }
+    };
+  </script>
 	alpha:<span id="alpha"></span><br/>
 	beta:<span id="beta"></span><br/>
 	gamma:<span id="gamma"></span><br/>
