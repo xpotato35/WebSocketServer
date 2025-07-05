@@ -102,14 +102,5 @@
     color: #6df;
   }
   </style>
-  <div id="info">相關參考：<a id="infoLink" href="#" target="_blank"></a></div>
-  <script>
-  var href = location.href;
-  var page = href.split("demo/");
-  var name = page[1].split("-demo")[0];
-  var title = document.querySelector('title').innerHTML;
-  document.getElementById('infoLink').setAttribute('href', '/articles/' + name + '.html');
-  document.getElementById('infoLink').innerHTML = title.split("demo")[0];
-  </script>
 </body>
 </html>
