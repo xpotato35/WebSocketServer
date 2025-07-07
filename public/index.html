@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+  <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<title>WebSocket Client Demo_控制裝置陀螺儀 ( 三軸 )</title>
+	<style>
+		body{
+			margin:50px;
+			font-size:15px;
+		}
+	</style>
+</head>
+<body>
+  <h1>WebSocket Client</h1>
+  <input id="messageInput" type="text" placeholder="輸入訊息..." />
+  <button id="sendBtn">送出</button>
+  <div id="log" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: scroll;"></div>
+
+  
+  <div class="data">
+    Alpha: <span id="alpha">N/A</span><br>
+    Beta: <span id="beta">N/A</span><br>
+    Gamma: <span id="gamma">N/A</span>
+  </div>
+
+  <!-- 引入 JavaScript -->
+  <script src="controller.js"></script>
+  <style>
+  #info {
+    position: fixed;
+    z-index: 999;
+    bottom: 20px;
+    left: 0px;
+    background: #222;
+    padding: 20px 30px;
+    color: #fff;
+    box-shadow: rgba(0, 0, 0, .5) 0 0 10px;
+    border-radius: 0 5px 5px 0;
+		font-size:16px;
+  }
+  
+  #info a {
+    color: #0bf;
+    transition: .2s;
+  }
+  
+  #info a:hover {
+    color: #6df;
+  }
+  </style>
+  <script src="controller.js?v=20250707-3"></script>
+</body>
+</html>

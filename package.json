@@ -1,0 +1,16 @@
+{
+  "name": "gyro-websocket-server",
+  "version": "1.0.0",
+  "description": "A simple WebSocket + HTTP server for Unity motion control",
+  "main": "websocket_server.js",
+  "scripts": {
+    "start": "node websocket_server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
