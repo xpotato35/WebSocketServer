@@ -1,107 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-  <meta name="author" content="oxxo.studio">
-  <meta name="copyright" content="oxxo.studio">
-  <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<title>WebSocket Client Demo_控制裝置陀螺儀 ( 三軸 )</title>
-	<style>
-		body{
-			margin:50px;
-			font-size:15px;
-		}
-	</style>
-	<script>
-	if(window.DeviceOrientationEvent) {
-		window.addEventListener('deviceorientation', function(event) {
-      var a = document.getElementById('alpha'),
-      		b = document.getElementById('beta'),
-      		g = document.getElementById('gamma'),
-      		alpha = event.alpha,
-      		beta = event.beta,
-		  		gamma = event.gamma;
-      
-      a.innerHTML = Math.round(alpha);
-      b.innerHTML = Math.round(beta);
-      g.innerHTML = Math.round(gamma);
-          
-		}, false);
-  }else{
-  	document.querySelector('body').innerHTML = '你的瀏覽器不支援喔';
-  }
-	</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>體感控制器</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 40px; }
+    .data { font-size: 20px; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <h1>WebSocket Client</h1>
-  <input id="messageInput" type="text" placeholder="輸入訊息..." />
-  <button id="sendBtn">送出</button>
-  <div id="log" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: scroll;"></div>
+  <h1>🎮 手機體感控制器</h1>
+  <p>連線狀態：<span id="status">尚未連線</span></p>
+  <div class="data">
+    Alpha: <span id="alpha">N/A</span><br>
+    Beta: <span id="beta">N/A</span><br>
+    Gamma: <span id="gamma">N/A</span>
+  </div>
 
-  <script>
-    const ws = new WebSocket('ws://localhost:8080');
-
-    const logDiv = document.getElementById('log');
-    const input = document.getElementById('messageInput');
-    const sendBtn = document.getElementById('sendBtn');
-
-    function log(message) {
-      logDiv.textContent += message + '\n';
-      logDiv.scrollTop = logDiv.scrollHeight;
-    }
-
-    ws.onopen = () => {
-      log('連線已開啟');
-    };
-
-    ws.onmessage = (event) => {
-      log('收到伺服器訊息：' + event.data);
-    };
-
-    ws.onerror = (error) => {
-      log('WebSocket 錯誤: ' + error.message);
-    };
-
-    ws.onclose = () => {
-      log('連線已關閉');
-    };
-
-    sendBtn.onclick = () => {
-      const msg = input.value;
-      if (msg && ws.readyState === WebSocket.OPEN) {
-        ws.send(msg);
-        log('送出訊息：' + msg);
-        input.value = '';
-      }
-    };
-  </script>
-	alpha:<span id="alpha"></span><br/>
-	beta:<span id="beta"></span><br/>
-	gamma:<span id="gamma"></span><br/>
-		
-  <style>
-  #info {
-    position: fixed;
-    z-index: 999;
-    bottom: 20px;
-    left: 0px;
-    background: #222;
-    padding: 20px 30px;
-    color: #fff;
-    box-shadow: rgba(0, 0, 0, .5) 0 0 10px;
-    border-radius: 0 5px 5px 0;
-		font-size:16px;
-  }
-  
-  #info a {
-    color: #0bf;
-    transition: .2s;
-  }
-  
-  #info a:hover {
-    color: #6df;
-  }
-  </style>
-  <script src="controller.js?v=20250705-2"></script>
+  <!-- 引入 JavaScript -->
+  <script src="controller.js"></script>
 </body>
 </html>
