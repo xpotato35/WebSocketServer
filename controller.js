@@ -1,3 +1,4 @@
+const statusEl = document.getElementById('status');
 const alphaEl = document.getElementById('alpha');
 const betaEl = document.getElementById('beta');
 const gammaEl = document.getElementById('gamma');
@@ -46,10 +47,10 @@ sendBtn.onclick = () => {
 // --- 陀螺儀 ---
 window.addEventListener('deviceorientation', (event) => {
   const { alpha, beta, gamma } = event;
-  // if (socket.readyState === WebSocket.OPEN) {
-  //   const data = { alpha, beta, gamma };
-  //   socket.send(JSON.stringify(data));
-  // }
+  if (socket.readyState === WebSocket.OPEN) {
+    const data = { alpha, beta, gamma };
+    socket.send(JSON.stringify(data));
+  }
 
   // 顯示在畫面上
   alphaEl.textContent = alpha?.toFixed(1) ?? 'N/A';
