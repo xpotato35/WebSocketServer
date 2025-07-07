@@ -1,10 +1,12 @@
-const statusEl = document.getElementById('status');
 const alphaEl = document.getElementById('alpha');
 const betaEl = document.getElementById('beta');
 const gammaEl = document.getElementById('gamma');
 
 // ✅ 這邊改成你的 WebSocket server 網址（部署上去後）
-const ws = new WebSocket('ws://localhost:8080');
+// 建議改這樣以相容本地與線上
+const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+const ws = new WebSocket('ws://localhost:3000');
 
 const logDiv = document.getElementById('log');
 const input = document.getElementById('messageInput');
@@ -29,6 +31,7 @@ ws.onerror = (error) => {
 
 ws.onclose = () => {
   log('連線已關閉');
+  log(protocol + location.host);
 };
 
 sendBtn.onclick = () => {
@@ -42,11 +45,11 @@ sendBtn.onclick = () => {
 
 // --- 陀螺儀 ---
 window.addEventListener('deviceorientation', (event) => {
-  const { alpha, beta, gamma } = event;
-  if (socket.readyState === WebSocket.OPEN) {
-    const data = { alpha, beta, gamma };
-    socket.send(JSON.stringify(data));
-  }
+  // const { alpha, beta, gamma } = event;
+  // if (socket.readyState === WebSocket.OPEN) {
+  //   const data = { alpha, beta, gamma };
+  //   socket.send(JSON.stringify(data));
+  // }
 
   // 顯示在畫面上
   alphaEl.textContent = alpha?.toFixed(1) ?? 'N/A';

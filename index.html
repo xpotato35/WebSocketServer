@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-  <meta name="author" content="oxxo.studio">
-  <meta name="copyright" content="oxxo.studio">
   <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<title>WebSocket Client Demo_控制裝置陀螺儀 ( 三軸 )</title>
 	<style>
@@ -12,6 +10,25 @@
 			font-size:15px;
 		}
 	</style>
+	<script>
+	if(window.DeviceOrientationEvent) {
+		window.addEventListener('deviceorientation', function(event) {
+      var a = document.getElementById('alpha'),
+      		b = document.getElementById('beta'),
+      		g = document.getElementById('gamma'),
+      		alpha = event.alpha,
+      		beta = event.beta,
+		  		gamma = event.gamma;
+      
+      a.innerHTML = Math.round(alpha);
+      b.innerHTML = Math.round(beta);
+      g.innerHTML = Math.round(gamma);
+          
+		}, false);
+  }else{
+  	document.querySelector('body').innerHTML = '你的瀏覽器不支援喔';
+  }
+	</script>
 </head>
 <body>
   <h1>WebSocket Client</h1>
@@ -19,7 +36,43 @@
   <button id="sendBtn">送出</button>
   <div id="log" style="white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: scroll;"></div>
 
-  
+  <script>
+    const ws = new WebSocket('ws://192.168.68.63:8080');
+
+    const logDiv = document.getElementById('log');
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function log(message) {
+      logDiv.textContent += message + '\n';
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    ws.onopen = () => {
+      log('連線已開啟');
+    };
+
+    ws.onmessage = (event) => {
+      log('收到伺服器訊息：' + event.data);
+    };
+
+    ws.onerror = (error) => {
+      log('WebSocket 錯誤: ' + error.message);
+    };
+
+    ws.onclose = () => {
+      log('連線已關閉');
+    };
+
+    sendBtn.onclick = () => {
+      const msg = input.value;
+      if (msg && ws.readyState === WebSocket.OPEN) {
+        ws.send(msg);
+        log('送出訊息：' + msg);
+        input.value = '';
+      }
+    };
+  </script>
   <div class="data">
     Alpha: <span id="alpha">N/A</span><br>
     Beta: <span id="beta">N/A</span><br>
@@ -51,6 +104,5 @@
     color: #6df;
   }
   </style>
-  <script src="controller.js?v=20250707-3"></script>
 </body>
 </html>
