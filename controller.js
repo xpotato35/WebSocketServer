@@ -4,45 +4,21 @@ const betaEl = document.getElementById('beta');
 const gammaEl = document.getElementById('gamma');
 
 // ✅ 這邊改成你的 WebSocket server 網址（部署上去後）
-// 建議改這樣以相容本地與線上
-const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+const socket = new WebSocket("wss://" + window.location.host);
 
-const ws = new WebSocket('ws://localhost:3000');
+// --- WebSocket 事件 ---
+socket.addEventListener('open', () => {
+  statusEl.textContent = "✅ 已連線";
+});
 
-const logDiv = document.getElementById('log');
-const input = document.getElementById('messageInput');
-const sendBtn = document.getElementById('sendBtn');
+socket.addEventListener('close', () => {
+  statusEl.textContent = "❌ 連線中斷";
+});
 
-function log(message) {
-  logDiv.textContent += message + '\n';
-  logDiv.scrollTop = logDiv.scrollHeight;
-}
-
-ws.onopen = () => {
-  log('連線已開啟');
-};
-
-ws.onmessage = (event) => {
-  log('收到伺服器訊息：' + event.data);
-};
-
-ws.onerror = (error) => {
-  log('WebSocket 錯誤: ' + error.message);
-};
-
-ws.onclose = () => {
-  log('連線已關閉');
-  log(protocol + location.host);
-};
-
-sendBtn.onclick = () => {
-  const msg = input.value;
-  if (msg && ws.readyState === WebSocket.OPEN) {
-    ws.send(msg);
-    log('送出訊息：' + msg);
-    input.value = '';
-  }
-};
+socket.addEventListener('error', (e) => {
+  statusEl.textContent = "⚠️ 連線錯誤";
+  console.error("WebSocket error:", e);
+});
 
 // --- 陀螺儀 ---
 window.addEventListener('deviceorientation', (event) => {
