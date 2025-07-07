@@ -45,7 +45,7 @@ sendBtn.onclick = () => {
 
 // --- 陀螺儀 ---
 window.addEventListener('deviceorientation', (event) => {
-  // const { alpha, beta, gamma } = event;
+  const { alpha, beta, gamma } = event;
   // if (socket.readyState === WebSocket.OPEN) {
   //   const data = { alpha, beta, gamma };
   //   socket.send(JSON.stringify(data));
