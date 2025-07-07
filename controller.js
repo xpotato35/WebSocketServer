@@ -4,29 +4,53 @@ const betaEl = document.getElementById('beta');
 const gammaEl = document.getElementById('gamma');
 
 // ✅ 這邊改成你的 WebSocket server 網址（部署上去後）
-const socket = new WebSocket("wss://" + window.location.host);
+// 建議改這樣以相容本地與線上
+const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
 
-// --- WebSocket 事件 ---
-socket.addEventListener('open', () => {
-  statusEl.textContent = "✅ 已連線";
-});
+const ws = new WebSocket('ws://localhost:3000');
 
-socket.addEventListener('close', () => {
-  statusEl.textContent = "❌ 連線中斷";
-});
+const logDiv = document.getElementById('log');
+const input = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
 
-socket.addEventListener('error', (e) => {
-  statusEl.textContent = "⚠️ 連線錯誤";
-  console.error("WebSocket error:", e);
-});
+function log(message) {
+  logDiv.textContent += message + '\n';
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+ws.onopen = () => {
+  log('連線已開啟');
+};
+
+ws.onmessage = (event) => {
+  log('收到伺服器訊息：' + event.data);
+};
+
+ws.onerror = (error) => {
+  log('WebSocket 錯誤: ' + error.message);
+};
+
+ws.onclose = () => {
+  log('連線已關閉');
+  log(protocol + location.host);
+};
+
+sendBtn.onclick = () => {
+  const msg = input.value;
+  if (msg && ws.readyState === WebSocket.OPEN) {
+    ws.send(msg);
+    log('送出訊息：' + msg);
+    input.value = '';
+  }
+};
 
 // --- 陀螺儀 ---
 window.addEventListener('deviceorientation', (event) => {
   const { alpha, beta, gamma } = event;
-  if (socket.readyState === WebSocket.OPEN) {
-    const data = { alpha, beta, gamma };
-    socket.send(JSON.stringify(data));
-  }
+  // if (socket.readyState === WebSocket.OPEN) {
+  //   const data = { alpha, beta, gamma };
+  //   socket.send(JSON.stringify(data));
+  // }
 
   // 顯示在畫面上
   alphaEl.textContent = alpha?.toFixed(1) ?? 'N/A';
