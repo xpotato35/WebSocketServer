@@ -7,7 +7,7 @@ const gammaEl = document.getElementById('gamma');
 // 建議改這樣以相容本地與線上
 const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
 
-const ws = new WebSocket('ws://192.168.68.60:3000');
+const ws = new WebSocket('ws://localhost:3000');
 
 const logDiv = document.getElementById('log');
 const input = document.getElementById('messageInput');
